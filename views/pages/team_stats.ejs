@@ -43,17 +43,17 @@
 		<br>
 		<table class="table text-center">
 			<tr>
-				<th>Wins[0].count</th>
+				<th>Wins</th>
 			
-				<th>Losses[0].count
+				<th>Losses
 				</th>
 				
 			</tr>
 			<tr>
-				<td> <%wins.forEach(function(wins)%><!-- TODO: Display the total number of wins here.  
+				<td> <%=wins[0].count%><!-- TODO: Display the total number of wins here.  
 					<%-wins%>		    This value should come from your server.js files query, don't calculate it in this file! --></td>
 				<td>
-				<%loses.forEach(function(loses)%>< <!-- TODO: Display the total number of losses here.  
+				<%=loses[0].count%> <!-- TODO: Display the total number of losses here.  
 							    This value should come from your server.js files query, don't calculate it in this file! --></td>
 			</tr>
 		</table>

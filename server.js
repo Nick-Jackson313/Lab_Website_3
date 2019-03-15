@@ -207,7 +207,60 @@ app.get('/team_stats', function(req, res){
     })
     .catch(error => {
         // display error message in case an error
-            console.log(error)
+            console.log(error);
+            
+    });
+});
+/*Add your other get/post request handlers below here: */
+app.get('/player_info', function(req, res){
+  var player_table = 'select id, name from football_players;';
+
+  db.any(player_table)
+    .then(function (rows) {
+          res.render('pages/player_info', {
+            my_title: "Player Info",
+            player_choice: '',
+            amountof_games:'',
+            players: rows
+          });
+
+      })
+    .catch(function (err) {
+        // display error message in case an error
+        request.flash('Error in retrieving players', err);
+        response.render('pages/player_info', {
+            title: 'Player Info',
+            player_choice: '',
+            players: '',
+            amountof_games:''
+        })
+    });
+});
+app.get('/player_info/post', function(req, res) {
+  var player_id = req.query.player_choice;
+  var player_query = 'select * from football_players where id=' + player_id + ';';
+  var players_query = 'select id, name from football_players;';
+  var played_games = 'SELECT count(*) FROM football_games WHERE '+ player_id +' = ANY(players);'
+  
+  db.task('get-everything', task => {
+        return task.batch([
+            task.any(player_query),
+            task.any(players_query),
+            task.any(played_games)
+        ]);
+    })
+    .then(item => {
+      console.log(item[0][0]);
+      res.render('pages/player_info',{
+        my_title: "Player Info",
+        player_choice: item[0][0],
+        players: item[1],
+        amountof_games: item[2]
+      })
+    })
+    .catch(error => {
+        // display error message in case an error
+            console.log(error);
             
     });
 });
